@@ -10,5 +10,6 @@ public class MvcConfig implements WebMvcConfigurer {
     // когда вы хотите перенаправить запрос напрямую в представление
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/user").setViewName("user");
+        registry.addViewController("/index").setViewName("index");
     }
 }

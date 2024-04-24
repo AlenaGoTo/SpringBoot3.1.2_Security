@@ -20,6 +20,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.successUserHandler = successUserHandler;
     }
 
+    // Настройка HttpSecurity
+    // .antMatchers("/", "/index").permitAll() - Запросы не требуют авторизации и являются общедоступной конечной точкой
+    // .anyRequest().authenticated() - если не выполняется выше, то требование аутентификация
+    // .formLogin().successHandler(successUserHandler) - Указывает на поддержку аутентификации на основе форм
+    // .permitAll() - для всех неавторизованных пользователей
+    // .logout() - Обеспечивает поддержку выхода из системы.
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
