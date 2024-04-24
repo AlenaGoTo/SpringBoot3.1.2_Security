@@ -23,14 +23,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     // Настройка HttpSecurity
     // .antMatchers("/", "/index").permitAll() - Запросы не требуют авторизации и являются общедоступной конечной точкой
     // .anyRequest().authenticated() - если не выполняется выше, то требование аутентификация
-    // .formLogin().successHandler(successUserHandler) - Указывает на поддержку аутентификации на основе форм
+    // .formLogin().successHandler(successUserHandler) - Поддержка аутентификации /login и действие после
     // .permitAll() - для всех неавторизованных пользователей
-    // .logout() - Обеспечивает поддержку выхода из системы.
+    // .logout() - Обеспечивает выход из системы /logout
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/index").permitAll()
+                .antMatchers("/user").hasAnyRole( "USER")
+                .antMatchers("/users", "/users_s").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(successUserHandler)
