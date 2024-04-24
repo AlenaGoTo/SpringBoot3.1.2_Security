@@ -8,7 +8,7 @@ import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
 
 @Controller
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/users_s")
 public class OneFormController {
 	@Autowired
 	private UserService userService;
@@ -18,14 +18,14 @@ public class OneFormController {
 	@GetMapping()
 	public String printUsers(ModelMap model, @ModelAttribute("user") User user){
 		model.addAttribute("users", userService.getAllUsers()); // передача данных в html
-		return "index";
+		return "admin1";
 	}
 
 	// удаляем юзера на страничке
 	@DeleteMapping("/{id}")
 	public String deleteUser(@PathVariable("id") long id){
 		userService.removeUserById(id);
-		return "redirect:/users";
+		return "redirect:/users_s";
 	}
 
 	// Действие по кнопке добавления юзера
@@ -36,7 +36,7 @@ public class OneFormController {
 	{
 		user = new User(name, lastname, age);
 		userService.saveUser(user);
-		return "redirect:/users";
+		return "redirect:/users_s";
 	}
 
 	// Действие по кнопке правки юзера на странице edit
@@ -47,7 +47,7 @@ public class OneFormController {
 									@RequestParam(value = "id") long id)
 	{
 		userService.updateUser(id, name, lastname, age);
-		return "redirect:/users";
+		return "redirect:/users_s";
 	}
 
 }
