@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+// настройка секьюрности по определенным URL, а также настройка UserDetails и GrantedAuthority
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -34,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     // аутентификация inMemory
+    //то, что будет интерпретироваться системой как пользователь
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
@@ -41,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 User.withDefaultPasswordEncoder()
                         .username("user")
                         .password("user")
-                        .roles("USER")
+                        .roles("USER") // будет преобразована в экземпляр GrantedAuthority - сущность, описывающая права юзера
                         .build();
 
         return new InMemoryUserDetailsManager(user);
