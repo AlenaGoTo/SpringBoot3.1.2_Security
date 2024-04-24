@@ -1,9 +1,11 @@
 package ru.itmentor.spring.boot_security.demo.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "USERS_WEB")
+@Table(name = "USERS_Security")
 public class User {
 
    @Id
@@ -18,6 +20,10 @@ public class User {
 
    @Column(name = "age")
    private Byte age;
+
+   @OneToMany(cascade = CascadeType.ALL)
+   @JoinColumn(name = "user_id")
+   private List<Role> roles = new ArrayList<>();
 
    public User() {}
    
