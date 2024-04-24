@@ -1,12 +1,19 @@
 package ru.itmentor.spring.boot_security.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+
+// UserDetails хранит основную информацию о пользователе, которая позже инкапсулируется в Authentication объекты
 @Entity
-@Table(name = "USERS_Security")
-public class User {
+@Table(name = "USERS")
+public class User implements UserDetails {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,16 +28,56 @@ public class User {
    @Column(name = "age")
    private Byte age;
 
-   @OneToMany(cascade = CascadeType.ALL)
+   @Column(name = "username")
+   private String username;
+
+   @Column(name = "password")
+   private String password;
+
+   @Column(name = "enabled")
+   private boolean enabled = true;
+
+
+   @OneToMany(cascade = {
+           CascadeType.PERSIST,
+           CascadeType.MERGE })
    @JoinColumn(name = "user_id")
    private List<Role> roles = new ArrayList<>();
 
    public User() {}
    
-   public User(String firstName, String lastName, Byte age) {
+   public User(String firstName, String lastName, Byte age, String username, String password) {
       this.firstName = firstName;
       this.lastName = lastName;
       this.age = age;
+      this.username = username;
+      this.password = password;
+   }
+
+   // НЕистекший срок действия УЗ
+   @Override
+   public boolean isAccountNonExpired() {
+      return false;
+   }
+   // НЕзаблокированный пользователь
+   @Override
+   public boolean isAccountNonLocked() {
+      return false;
+   }
+   // НЕистекший пароль
+   @Override
+   public boolean isCredentialsNonExpired() {
+      return false;
+   }
+   // Включен ли пользователь
+   @Override
+   public boolean isEnabled() {
+      return false;
+   }
+   // полномочия, предоставленные пользователю
+   @Override
+   public Collection<? extends GrantedAuthority> getAuthorities() {
+      return getRoles();
    }
 
    public Long getId() {
@@ -63,6 +110,30 @@ public class User {
 
    public void setAge(Byte age) {
       this.age = age;
+   }
+
+   public String getUsername() {
+      return username;
+   }
+
+   public void setUsername(String username) {
+      this.username = username;
+   }
+
+   public String getPassword() {
+      return password;
+   }
+
+   public void setPassword(String password) {
+      this.password = password;
+   }
+
+   public List<Role> getRoles() {
+      return roles;
+   }
+
+   public void setRoles(List<Role> roles) {
+      this.roles = roles;
    }
 
    @Override

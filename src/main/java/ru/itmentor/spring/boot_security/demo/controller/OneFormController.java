@@ -32,9 +32,11 @@ public class OneFormController {
 	@PostMapping()
 	public String addUser(@RequestParam("firstName") String name,
 						  @RequestParam("lastName") String lastname,
-						  @RequestParam("age") byte age)
+						  @RequestParam("age") byte age,
+						  @RequestParam("lastName") String username,
+						  @RequestParam("lastName") String password)
 	{
-		user = new User(name, lastname, age);
+		user = new User(name, lastname, age, username, password);
 		userService.saveUser(user);
 		return "redirect:/users_s";
 	}
