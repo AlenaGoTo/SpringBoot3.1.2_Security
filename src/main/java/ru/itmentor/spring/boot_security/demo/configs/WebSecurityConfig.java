@@ -27,19 +27,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    // .permitAll() - Запросы не требуют авторизации и являются общедоступной конечной точкой
-                    .antMatchers("/", "/index", "/user").permitAll()
-                    // .hasAnyRole - доступны пользователям с указанной ролью
-                    .antMatchers("/user").hasAnyRole( "USER")
-                    .antMatchers("/admin").hasAnyRole("ADMIN")
-                    // если не выполняется выше, то требование аутентификация
-                    .anyRequest().authenticated()
+                // .permitAll() - Запросы не требуют авторизации и являются общедоступной конечной точкой
+                .antMatchers("/", "/index", "/user").permitAll()
+                // .hasAnyRole - доступны пользователям с указанной ролью
+                .antMatchers("/user").hasAnyRole( "USER")
+                .antMatchers("/admin").hasAnyRole("ADMIN")
+                // если не выполняется выше, то требование аутентификация
+                .anyRequest().authenticated()
                 .and()
-                    // поддержка аутентификации /login и действие после
-                    .formLogin().successHandler(successUserHandler).permitAll()
+                // поддержка аутентификации /login и действие после
+                .formLogin().successHandler(successUserHandler).permitAll()
                 .and()
-                    // Обеспечивает выход из системы /logout
-                    .logout().permitAll();
+                // Обеспечивает выход из системы /logout
+                .logout().permitAll();
     }
 
     // переопределение запросов на получение полномочий и enabled
@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .dataSource(dataSource)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance())
                 .usersByUsernameQuery("select username, password, enabled from users where username=?")
-                .authoritiesByUsernameQuery("select u.username, r.role from users u inner join roles r on u.id = r.user_id where u.username=?");
+                .authoritiesByUsernameQuery("select u.username, r.role from users u inner join users_roles ur on u.id = ur.user_id inner join roles r on ur.roles_id = r.id where u.username=?");
     }
 
     // аутентификация inMemory

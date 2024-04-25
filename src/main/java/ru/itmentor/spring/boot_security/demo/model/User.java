@@ -27,7 +27,7 @@ public class User implements UserDetails {
    @Column(name = "age")
    private Byte age;
 
-   @Column(name = "username", unique=true)
+   @Column(name = "username", nullable = false, unique = true)
    private String username;
 
    @Column(name = "password")
@@ -37,7 +37,7 @@ public class User implements UserDetails {
    private boolean enabled = true;
 
 
-   @OneToMany(cascade = {
+   @ManyToMany(cascade = {
            CascadeType.PERSIST,
            CascadeType.MERGE })
    @JoinColumn(name = "user_id")
