@@ -8,7 +8,7 @@ import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
 
 @Controller
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/admin")
 public class AdminController {
 	@Autowired
 	private UserService userService;
@@ -18,7 +18,7 @@ public class AdminController {
 	@GetMapping()
 	public String printUsers(ModelMap model){
 		model.addAttribute("users", userService.getAllUsers()); // передача данных в html
-		return "admin";
+		return "userCRUD";
 	}
 
 	//страница для правки юзера
@@ -32,7 +32,7 @@ public class AdminController {
 	@DeleteMapping("/{id}")
 	public String deleteUser(@PathVariable("id") long id){
 		userService.removeUserById(id);
-		return "redirect:/users";
+		return "redirect:/admin";
 	}
 
 	// Действие по кнопке правки юзера на странице edit
@@ -43,7 +43,7 @@ public class AdminController {
 						   @PathVariable("id") long id )
 	{
 		userService.updateUser(id, name, lastname, age);
-		return "redirect:/users";
+		return "redirect:/admin";
 	}
 
 	//страничка с добавлением юзера
@@ -62,7 +62,7 @@ public class AdminController {
 	{
 		user = new User(name, lastname, age, username, password);
 		userService.saveUser(user);
-		return "redirect:/users";
+		return "redirect:/admin";
 	}
 	
 }

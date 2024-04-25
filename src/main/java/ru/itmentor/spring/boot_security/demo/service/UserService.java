@@ -15,10 +15,6 @@ public interface UserService {
 
     User getUserById(long id);
 
-    void createUsersTable();
-
-    void dropUsersTable();
-
-    void cleanUsersTable();
+    User getUserByParam(String username);
 
 }

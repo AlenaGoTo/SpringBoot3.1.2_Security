@@ -28,7 +28,7 @@ public class User implements UserDetails {
    @Column(name = "age")
    private Byte age;
 
-   @Column(name = "username")
+   @Column(name = "username", unique=true)
    private String username;
 
    @Column(name = "password")
@@ -134,6 +134,10 @@ public class User implements UserDetails {
 
    public void setRoles(List<Role> roles) {
       this.roles = roles;
+   }
+
+   public void addRole(Role role) {
+      this.roles.add(role);
    }
 
    @Override

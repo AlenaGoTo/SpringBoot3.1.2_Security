@@ -15,8 +15,8 @@ public class UserDaoImp implements UserDao {
 
    @Override
    public void saveUser(User user) {
-      em.persist(user);
-      //em.flush();
+      em.merge(user);
+      em.flush();
 
    }
 
@@ -48,21 +48,9 @@ public class UserDaoImp implements UserDao {
    }
 
    @Override
-   public void dropUsersTable() {
-      em.createNativeQuery("DROP TABLE IF EXISTS USERS_WEB ").executeUpdate();
-   }
-
-   @Override
-   public void createUsersTable() {
-      em.createNativeQuery("CREATE TABLE IF NOT EXISTS USERS_WEB " +
-              "(ID            SERIAL PRIMARY KEY     NOT NULL," +
-              " NAME          VARCHAR(255)    NOT NULL, " +
-              " LASTNAME      VARCHAR(255)    NOT NULL, " +
-              " AGE           INT     NOT NULL)").executeUpdate();
-   }
-
-   @Override
-   public void cleanUsersTable() {
-      em.createNativeQuery("DELETE from USERS_WEB").executeUpdate();
+   public User getUserByParam(String username) {
+      return em.createQuery("from User where username =: username",  User.class)
+              .setParameter("username", username)
+              .getSingleResult();
    }
 }

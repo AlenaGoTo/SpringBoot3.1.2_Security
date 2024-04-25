@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Home user's page</title>
+</head>
+<body>
+    <h1>User, welcome spring boot security page!</h1>
+    <div>
+        <p th:text="${user.toString()}"></p>
+        <p>Roles: <span th:text="${#strings.setJoin(user.getRoles(), ', ')}"></span></p>
+    </div>
+    </br>
+    </br>
+    <form th:action="@{/logout}" method="POST">
+        <input type="submit" value="Sign Out"/>
+    </form>
+</body>
+</html>

@@ -44,21 +44,9 @@ public class UserServiceImp implements UserService {
       return userDao.getUserById(id);
    }
 
-   @Transactional
+   @Transactional(readOnly = true)
    @Override
-   public void createUsersTable() {
-      userDao.createUsersTable();
-   }
-
-   @Transactional
-   @Override
-   public void dropUsersTable() {
-      userDao.dropUsersTable();
-   }
-
-   @Transactional
-   @Override
-   public void cleanUsersTable() {
-      userDao.cleanUsersTable();
+   public User getUserByParam(String username) {
+      return userDao.getUserByParam(username);
    }
 }

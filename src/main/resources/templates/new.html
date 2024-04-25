@@ -6,17 +6,22 @@
     <title>Add new user</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/users}" th:object="${user}">
-    <label for="name">Name: </label>
-    <input type="text" th:field="*{firstName}" id="name"/>
-    <br/>
-    <label for="lastname">Lastname: </label>
-    <input type="text" th:field="*{lastName}" id="lastname"/>
-    <br/>
-    <label for="age">Age: </label>
-    <input type="text" th:field="*{age}" id="age"/>
-    <br/>
-    <input type="submit" value="Add user"/>
-</form>
+    <form th:method="POST" th:action="@{/admin}" th:object="${user}">
+        <label for="name">Name: </label>
+        <input type="text" th:field="*{firstName}" id="name"/>
+        <br/>
+        <label for="lastname">Lastname: </label>
+        <input type="text" th:field="*{lastName}" id="lastname"/>
+        <br/>
+        <label for="age">Age: </label>
+        <input type="text" th:field="*{age}" id="age"/>
+        <br/>
+        <input type="submit" value="Add user"/>
+    </form>
+    </br>
+    </br>
+    <form th:action="@{/logout}" method="POST">
+        <input type="submit" value="Sign Out"/>
+    </form>
 </body>
 </html>
