@@ -18,7 +18,7 @@
         <form th:action="@{/logout}" method="POST">
             <input type="submit" value="Sign Out"/>
         </form>
-        <h4><a href="/user">Мои данные (только пользователь)</a></h4>
+        <h4><a href="/user">Мои данные</a></h4>
     </div>
     <!--Блок для НЕ авторизованных -->
     <div sec:authorize="!isAuthenticated()">
@@ -27,7 +27,7 @@
     </div>
     <!--Блок для админа -->
     <div sec:authorize="hasRole('ADMIN')">
-        <h4><a href="/admin">Пользователи (только админ1)</a></h4>
+        <h4><a href="/admin">Пользователи</a></h4>
     </div>
 </div>
 

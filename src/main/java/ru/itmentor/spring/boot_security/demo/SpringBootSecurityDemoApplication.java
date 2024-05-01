@@ -27,15 +27,11 @@ public class SpringBootSecurityDemoApplication {
 		user.addRole(role2);
 		admin.addRole(role1);
 
-		System.out.println("OK");
 		userService.saveUser(two);
-		System.out.println("OK");
 		userService.saveUser(user);
 		userService.saveUser(admin);
 		userService.getUserByParam("two");
-		System.out.println("OK");
 		userService.getUserByParam("two123");
-		System.out.println("OK");
 
 	}
 
