@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
-import ru.itmentor.spring.boot_security.demo.service.EntityService;
 import ru.itmentor.spring.boot_security.demo.service.impl.RoleService;
 import ru.itmentor.spring.boot_security.demo.service.impl.UserService;
 
@@ -69,7 +67,7 @@ public class AdminController {
 						  @RequestParam("lastName") String password)
 	{
 		user = new User(name, lastname, age, username, password);
-		userService.saveUser(user);
+		userService.save(user);
 		return "redirect:/admin";
 	}
 	

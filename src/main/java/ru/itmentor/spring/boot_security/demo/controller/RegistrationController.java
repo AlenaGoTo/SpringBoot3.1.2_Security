@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
+import ru.itmentor.spring.boot_security.demo.service.impl.UserService;
 
 @Controller
 @RequestMapping("/registration")
@@ -38,12 +39,12 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Пароли не совпадают");
             return "registration";
         }*/
-        if (!userService.getUserByParam(userForm.getUsername()).isEmpty()){
+        if (!userService.getByParam(userForm.getUsername()).isEmpty()){
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
             return "registration";
         }
         userForm.addRole(new Role(USER));
-        userService.saveUser(userForm);
+        userService.save(userForm);
 
         return "redirect:/";
     }
