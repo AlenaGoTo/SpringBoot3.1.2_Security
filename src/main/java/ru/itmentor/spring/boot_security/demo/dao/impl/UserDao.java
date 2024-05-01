@@ -1,5 +1,6 @@
-package ru.itmentor.spring.boot_security.demo.dao;
+package ru.itmentor.spring.boot_security.demo.dao.impl;
 
+import ru.itmentor.spring.boot_security.demo.dao.EntityDao;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -9,47 +10,44 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class UserDaoImp implements UserDao {
+public class UserDao implements EntityDao<User> {
 
    @PersistenceContext
    private EntityManager em;
 
    @Override
-   public void saveUser(User user) {
+   public void save(User user) {
       em.merge(user);
       em.flush();
-
    }
 
    @Override
-   public void removeUserById(long id) {
+   public void deleteById(long id) {
       User user = em.find(User.class, id);
       em.remove(user);
       em.flush();
-
    }
 
    @Override
-   public List<User> getAllUsers() {
+   public void update(long id, User updatedUser) {
+      User user = em.find(User.class, id);
+      user.setFirstName(updatedUser.getFirstName());
+      user.setLastName(updatedUser.getLastName());
+      user.setAge(updatedUser.getAge());
+   }
+
+   @Override
+   public List<User> getAll() {
       return em.createQuery("from User", User.class).getResultList();
    }
 
    @Override
-   public void updateUser(long id, String name, String lastname, byte age) {
-      User user = em.find(User.class, id);
-      user.setFirstName(name);
-      user.setLastName(lastname);
-      user.setAge(age);
-
+   public Optional<User> getById(long id) {
+      return Optional.ofNullable(em.find(User.class, id));
    }
 
    @Override
-   public User getUserById(long id) {
-      return em.find(User.class,id);
-   }
-
-   @Override
-   public Optional<User> getUserByParam(String username) {
+   public Optional<User> getByParam(String username) {
       return Optional.ofNullable(
               em.createQuery("from User where username =: username",  User.class)
                       .setParameter("username", username)

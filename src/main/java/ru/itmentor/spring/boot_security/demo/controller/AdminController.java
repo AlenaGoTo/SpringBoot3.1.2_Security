@@ -4,34 +4,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
-import ru.itmentor.spring.boot_security.demo.service.UserService;
+import ru.itmentor.spring.boot_security.demo.service.EntityService;
+import ru.itmentor.spring.boot_security.demo.service.impl.RoleService;
+import ru.itmentor.spring.boot_security.demo.service.impl.UserService;
 
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private RoleService roleService;
 	private User user;
 
 	//страничка со всеми юзерами из БД
 	@GetMapping()
 	public String printUsers(ModelMap model){
-		model.addAttribute("users", userService.getAllUsers()); // передача данных в html
+		model.addAttribute("users", userService.getAll());
 		return "userCRUD";
 	}
 
 	//страница для правки юзера
 	@GetMapping(value = "/{id}")
 	public String getUser(@PathVariable("id") long id, ModelMap model){
-		model.addAttribute("user", userService.getUserById(id)); // передача данных в html
+		model.addAttribute("user", userService.getById(id));
 		return "edit";
 	}
 
 	// удаляем юзера на страничке show
 	@DeleteMapping("/{id}")
 	public String deleteUser(@PathVariable("id") long id){
-		userService.removeUserById(id);
+		userService.deleteById(id);
 		return "redirect:/admin";
 	}
 
@@ -42,7 +47,10 @@ public class AdminController {
 						   @RequestParam("age") byte age,
 						   @PathVariable("id") long id )
 	{
-		userService.updateUser(id, name, lastname, age);
+		User user = userService.getById(id).orElseThrow(() -> new RuntimeException("User not found"));
+		user.setFirstName(name);
+		user.setLastName(lastname);
+		user.setAge(age);
 		return "redirect:/admin";
 	}
 

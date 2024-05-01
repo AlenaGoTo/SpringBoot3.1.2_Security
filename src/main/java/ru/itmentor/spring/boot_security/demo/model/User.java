@@ -36,7 +36,6 @@ public class User implements UserDetails {
    @Column(name = "enabled")
    private boolean enabled = true;
 
-
    @ManyToMany(cascade = {
            CascadeType.PERSIST,
            CascadeType.MERGE })
@@ -51,6 +50,63 @@ public class User implements UserDetails {
       this.age = age;
       this.username = username;
       this.password = password;
+   }
+
+   public List<Role> getRoles() {
+      return roles;
+   }
+   public void setRoles(List<Role> roles) {
+      this.roles = roles;
+   }
+   public void addRole(Role role) {
+      this.roles.add(role);
+      //role.getUsers().add(this);
+   }
+   public void removeRole(Role role) {
+      this.roles.remove(role);
+      //role.getUsers().remove(this);
+   }
+
+   public Long getId() {
+      return id;
+   }
+   public void setId(Long id) {
+      this.id = id;
+   }
+   public String getFirstName() {
+      return firstName;
+   }
+   public void setFirstName(String firstName) {
+      this.firstName = firstName;
+   }
+   public String getLastName() {
+      return lastName;
+   }
+   public void setLastName(String lastName) {
+      this.lastName = lastName;
+   }
+   public Byte getAge() {
+      return age;
+   }
+   public void setAge(Byte age) {
+      this.age = age;
+   }
+   public String getUsername() {
+      return username;
+   }
+   public void setUsername(String username) {
+      this.username = username;
+   }
+   public String getPassword() {
+      return password;
+   }
+   public void setPassword(String password) {
+      this.password = password;
+   }
+
+   @Override
+   public String toString() {
+      return "ID - " + id + ", NAME - " + firstName + ", LASTNAME - " + lastName + ", AGE - " + age;
    }
 
    // НЕистекший срок действия УЗ
@@ -77,71 +133,6 @@ public class User implements UserDetails {
    @Override
    public Collection<? extends GrantedAuthority> getAuthorities() {
       return getRoles();
-   }
-
-   public Long getId() {
-      return id;
-   }
-
-   public void setId(Long id) {
-      this.id = id;
-   }
-
-   public String getFirstName() {
-      return firstName;
-   }
-
-   public void setFirstName(String firstName) {
-      this.firstName = firstName;
-   }
-
-   public String getLastName() {
-      return lastName;
-   }
-
-   public void setLastName(String lastName) {
-      this.lastName = lastName;
-   }
-
-   public Byte getAge() {
-      return age;
-   }
-
-   public void setAge(Byte age) {
-      this.age = age;
-   }
-
-   public String getUsername() {
-      return username;
-   }
-
-   public void setUsername(String username) {
-      this.username = username;
-   }
-
-   public String getPassword() {
-      return password;
-   }
-
-   public void setPassword(String password) {
-      this.password = password;
-   }
-
-   public List<Role> getRoles() {
-      return roles;
-   }
-
-   public void setRoles(List<Role> roles) {
-      this.roles = roles;
-   }
-
-   public void addRole(Role role) {
-      this.roles.add(role);
-   }
-
-   @Override
-   public String toString() {
-      return "ID - " + id + ", NAME - " + firstName + ", LASTNAME - " + lastName + ", AGE - " + age;
    }
 
 }
