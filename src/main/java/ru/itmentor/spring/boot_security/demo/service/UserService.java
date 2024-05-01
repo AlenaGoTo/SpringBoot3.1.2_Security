@@ -1,8 +1,10 @@
 package ru.itmentor.spring.boot_security.demo.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.itmentor.spring.boot_security.demo.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
     void saveUser(User user);
@@ -15,6 +17,6 @@ public interface UserService {
 
     User getUserById(long id);
 
-    User getUserByParam(String username);
+    Optional<User> getUserByParam(String username);
 
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDaoImp implements UserDao {
@@ -48,9 +49,11 @@ public class UserDaoImp implements UserDao {
    }
 
    @Override
-   public User getUserByParam(String username) {
-      return em.createQuery("from User where username =: username",  User.class)
-              .setParameter("username", username)
-              .getSingleResult();
+   public Optional<User> getUserByParam(String username) {
+      return Optional.ofNullable(
+              em.createQuery("from User where username =: username",  User.class)
+                      .setParameter("username", username)
+                      .getResultList()
+                      .stream().findFirst().orElse(null));
    }
 }

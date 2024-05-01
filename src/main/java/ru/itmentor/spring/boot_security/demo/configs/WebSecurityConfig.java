@@ -26,20 +26,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
+            .authorizeRequests()
+                //Доступ только для не зарегистрированных пользователей
+                .antMatchers("/registration").not().fullyAuthenticated()
                 // .permitAll() - Запросы не требуют авторизации и являются общедоступной конечной точкой
-                .antMatchers("/", "/index", "/user").permitAll()
+                .antMatchers("/", "/index").permitAll()
                 // .hasAnyRole - доступны пользователям с указанной ролью
-                .antMatchers("/user").hasAnyRole( "USER")
+                .antMatchers("/user").hasAnyRole( "USER", "ADMIN")
                 .antMatchers("/admin").hasAnyRole("ADMIN")
-                // если не выполняется выше, то требование аутентификация
-                .anyRequest().authenticated()
-                .and()
+                // все остальное требует аутентификации
+            .anyRequest().authenticated()
+            .and()
                 // поддержка аутентификации /login и действие после
                 .formLogin().successHandler(successUserHandler).permitAll()
-                .and()
-                // Обеспечивает выход из системы /logout
-                .logout().permitAll();
+            .and()
+                // Обеспечивает выход из системы /logout с перенаправлением на главную страницу
+                .logout().permitAll().logoutSuccessUrl("/");;
     }
 
     // переопределение запросов на получение полномочий и enabled

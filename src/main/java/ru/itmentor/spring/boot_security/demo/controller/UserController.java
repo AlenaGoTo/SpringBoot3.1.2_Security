@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.service.UserService;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
@@ -20,7 +22,7 @@ public class UserController {
     @GetMapping()
     public String selectUser(ModelMap model, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userService.getUserByParam(userDetails.getUsername());
+        User user = userService.getUserByParam(userDetails.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
         model.addAttribute("user", user);
         return "userREAD";
     }
