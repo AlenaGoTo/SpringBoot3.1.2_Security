@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // .permitAll() - Запросы не требуют авторизации и являются общедоступной конечной точкой
                 .antMatchers("/", "/index").permitAll()
                 // .hasAnyRole - доступны пользователям с указанной ролью
-                .antMatchers("/user").hasAnyRole( "USER", "ADMIN")
+                .antMatchers("/user").hasAnyRole( "USER")
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 // все остальное требует аутентификации
             .anyRequest().authenticated()
