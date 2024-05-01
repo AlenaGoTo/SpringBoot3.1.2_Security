@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
+import ru.itmentor.spring.boot_security.demo.service.impl.RoleService;
 import ru.itmentor.spring.boot_security.demo.service.impl.UserService;
 
 @Controller
@@ -19,6 +19,8 @@ public class RegistrationController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
 
     private static final String USER = "ROLE_USER";
 
@@ -30,20 +32,18 @@ public class RegistrationController {
     }
 
     @PostMapping()
-    public String addUser(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
+    public String addUser(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, ModelMap model) {
 
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-        /*if (!userForm.getPassword().equals(userForm.getPasswordConfirm())){
-            model.addAttribute("passwordError", "Пароли не совпадают");
-            return "registration";
-        }*/
-        if (!userService.getByParam(userForm.getUsername()).isEmpty()){
-            model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
-            return "registration";
+
+        if (!userService.getByParam(userForm.getUsername()).isEmpty()) {
+            model.addAttribute("message", "User exists!");
+            return registration(model);
         }
-        userForm.addRole(new Role(USER));
+        
+        userForm.addRole(roleService.getByParam(USER).orElseThrow(()->new RuntimeException("Role not found")));
         userService.save(userForm);
 
         return "redirect:/";
