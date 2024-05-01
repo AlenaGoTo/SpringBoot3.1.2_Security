@@ -66,6 +66,9 @@ public class User implements UserDetails {
       this.roles.remove(role);
       //role.getUsers().remove(this);
    }
+   public void cleanRoles() {
+      this.roles.clear();
+   }
 
    public Long getId() {
       return id;

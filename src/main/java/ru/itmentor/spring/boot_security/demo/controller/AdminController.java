@@ -18,7 +18,6 @@ public class AdminController {
 	private UserService userService;
 	@Autowired
 	private RoleService roleService;
-	private User user;
 
 	//страничка со всеми юзерами из БД
 	@GetMapping()
@@ -27,31 +26,43 @@ public class AdminController {
 		return "userCRUD";
 	}
 
-	//страница для правки юзера
-	@GetMapping(value = "/{id}")
-	public String getUser(@PathVariable("id") long id, ModelMap model){
-		model.addAttribute("user", userService.getById(id).orElseThrow(() -> new RuntimeException("User not found")));
-		return "edit";
-	}
-
-	// удаляем юзера на страничке show
+	// удаляем юзера на страничке userCRUD
 	@DeleteMapping("/{id}")
 	public String deleteUser(@PathVariable("id") long id){
 		userService.deleteById(id);
 		return "redirect:/admin";
 	}
 
+	//страница для правки юзера
+	@GetMapping(value = "/{id}")
+	public String getUser(@PathVariable("id") long id, ModelMap model){
+		model.addAttribute("user", userService.getById(id).orElseThrow(() -> new RuntimeException("User not found")));
+		model.addAttribute("roles", roleService.getAll());
+		return "edit";
+	}
+
 	// Действие по кнопке правки юзера на странице edit
 	@PatchMapping("/{id}")
-	public String editUser(@RequestParam("firstName") String name,
+	public String editUser(ModelMap model,
+						   @RequestParam("firstName") String name,
 						   @RequestParam("lastName") String lastname,
 						   @RequestParam("age") byte age,
-						   @PathVariable("id") long id )
+						   @PathVariable("id") long id,
+						   @RequestParam(value = "roles", required = false) Role[] roles)
 	{
 		User user = userService.getById(id).orElseThrow(() -> new RuntimeException("User not found"));
 		user.setFirstName(name);
 		user.setLastName(lastname);
 		user.setAge(age);
+
+		if (roles != null) {
+			user.cleanRoles();
+			Arrays.stream(roles).forEach(role->user.addRole(roleService.getByParam(role.getRole()).orElseThrow()));
+		} else {
+			user.cleanRoles();
+		}
+
+		userService.update(id, user);
 		return "redirect:/admin";
 	}
 
