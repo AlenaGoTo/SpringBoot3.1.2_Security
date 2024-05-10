@@ -1,6 +1,7 @@
 package ru.itmentor.spring.boot_security.demo.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,8 +9,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 // настройка секьюрности по определенным URL, а также настройка UserDetails и GrantedAuthority
 @Configuration
@@ -33,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //Доступ только для не зарегистрированных пользователей
                 .antMatchers("/registration").not().fullyAuthenticated()
                 // .permitAll() - Запросы не требуют авторизации и являются общедоступной конечной точкой
-                .antMatchers("/", "/index").permitAll()
+                .antMatchers("/", "/index", "/crud/**").permitAll()
                 // .hasAnyRole - доступны пользователям с указанной ролью
                 .antMatchers("/user").hasAnyRole( "USER")
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
@@ -56,6 +61,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usersByUsernameQuery("select username, password, enabled from users where username=?")
                 .authoritiesByUsernameQuery("select u.username, r.role from users u inner join users_roles ur on u.id = ur.user_id inner join roles r on ur.roles_id = r.id where u.username=?");
     }
+
+    /*
+    // Контейнер для конфигурации CORS, а также методы проверки фактического источника, методы HTTP и заголовки данного запроса.
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); // Список источников, для которых разрешены запросы между источниками,
+        configuration.setAllowedMethods(Arrays.asList("GET","POST")); // разрешенные методы HTTP
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }*/
 
     // аутентификация inMemory
     //то, что будет интерпретироваться системой как пользователь
