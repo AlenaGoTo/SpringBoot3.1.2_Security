@@ -1,7 +1,6 @@
 package ru.itmentor.spring.boot_security.demo.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,12 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
-import java.util.Arrays;
 
 // настройка секьюрности по определенным URL, а также настройка UserDetails и GrantedAuthority
 @Configuration
@@ -28,20 +23,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.successUserHandler = successUserHandler;
     }
 
-    // Настройка HttpSecurity
+    // Настройка HttpSecurity для авторизации
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             // отключение CSRF защиты (для постмана POST)
             .csrf().ignoringRequestMatchers(new AntPathRequestMatcher("/crud/**")).and()
             .authorizeRequests()
-                //Доступ только для не зарегистрированных пользователей
+                //не требует аутентификации
                 .antMatchers("/registration").not().fullyAuthenticated()
-                // .permitAll() - Запросы не требуют авторизации и являются общедоступной конечной точкой
-                .antMatchers("/", "/index", "/crud/**").permitAll()
+                // .permitAll() - не требуют авторизации и являются общедоступной конечной точкой
+                .antMatchers("/", "/index").permitAll()
                 // .hasAnyRole - доступны пользователям с указанной ролью
                 .antMatchers("/user").hasAnyRole( "USER")
-                .antMatchers("/admin/**").hasAnyRole("ADMIN")
+                .antMatchers("/admin/**", "/crud/**").hasAnyRole("ADMIN")
                 // все остальное требует аутентификации
             .anyRequest().authenticated()
             .and()
@@ -52,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().permitAll().logoutSuccessUrl("/");
     }
 
+    // Настройка AuthenticationManagerBuilder для аутентификации
     // переопределение запросов на получение полномочий и enabled
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
